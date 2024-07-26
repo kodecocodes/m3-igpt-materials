@@ -68,34 +68,5 @@ class GPTClient {
     return request
   }
   
-  func sendChats(_ chats: [GPTMessage]) async throws -> GPTChatResponse {
-    do {
-      let chatRequest = GPTChatRequest(model: model, messages: context + chats)
-      return try await sendChatRequest(chatRequest)
-      
-    } catch let error as GPTClientError {
-      throw error
-    } catch {
-      throw GPTClientError.networkError(error: error)
-    }
-  }
-  
-  private func sendChatRequest(_ chatRequest: GPTChatRequest) async throws -> GPTChatResponse {
-    let data = try encoder.encode(chatRequest)
-    
-    let url = URL(string: "https://api.openai.com/v1/chat/completions")!
-    let request = requestFor(url: url, httpMethod: "POST", httpBody: data)
-    
-    let (responseData, urlResponse) = try await urlSession.data(for: request)
-    guard let httpResponse = urlResponse as? HTTPURLResponse else {
-      throw GPTClientError.networkError(message: "URLResponse is not an HTTPURLResponse")
-    }
-    guard httpResponse.statusCode == 200 else {
-      let errorResponse = try? decoder.decode(GPTErrorResponse.self, from: responseData)
-      throw GPTClientError.errorResponse(statusCode: httpResponse.statusCode, error: errorResponse)
-    }
-        
-    let chatResponse = try decoder.decode(GPTChatResponse.self, from: responseData)
-    return chatResponse
-  }
+
 }
