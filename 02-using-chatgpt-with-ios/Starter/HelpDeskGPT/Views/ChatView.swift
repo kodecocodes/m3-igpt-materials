@@ -34,10 +34,6 @@ import SwiftUI
 
 struct ChatView: View {
   
-  var client = GPTClient(
-    model: .gpt4Turbo
-  )
-  
   @State var messages: [GPTMessage] = [
     GPTMessage(role: .assistant, content: "Hello, how can I help you today?")
   ]
@@ -104,9 +100,8 @@ struct ChatView: View {
   
   private func sendMessage() {
     isLoading = true
-    
     Task {
-      try await Task.sleep(nanoseconds: 500_000)
+      try await Task.sleep(nanoseconds: 1_000_000_000)
       let message = GPTMessage(role: .user, content: inputText)
       messages.append(message)
       isLoading = false

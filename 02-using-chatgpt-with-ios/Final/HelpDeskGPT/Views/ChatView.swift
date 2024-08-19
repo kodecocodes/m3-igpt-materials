@@ -34,9 +34,7 @@ import SwiftUI
 
 struct ChatView: View {
   
-  var client = GPTClient(
-    model: .gpt4Turbo
-  )
+  var client = GPTClient(model: .gpt35Turbo)
   
   @State var messages: [GPTMessage] = [
     GPTMessage(role: .assistant, content: "Hello, how can I help you today?")
@@ -49,23 +47,7 @@ struct ChatView: View {
     NavigationView {
       VStack {
         messagesScrollView
-        
-        HStack {
-          TextField("Type your message...", text: $inputText, axis: .vertical)
-            .textFieldStyle(RoundedBorderTextFieldStyle())
-            .padding()
-          
-          if isLoading {
-            ProgressView()
-              .padding()
-          }
-          
-          Button(action: sendMessage) {
-            Text("Submit")
-          }
-          .disabled(inputText.isEmpty || isLoading)
-          .padding()
-        }
+        inputMessageView
       }
       .navigationTitle("Help Desk Chat")
       .navigationBarTitleDisplayMode(.inline)
@@ -74,7 +56,7 @@ struct ChatView: View {
       }.disabled(messages.count < 2))
     }
   }
-  
+    
   var messagesScrollView: some View {
     ScrollView {
       VStack(spacing: 10) {
@@ -99,6 +81,25 @@ struct ChatView: View {
     }
   }
   
+  var inputMessageView: some View {
+    HStack {
+      TextField("Type your message...", text: $inputText, axis: .vertical)
+        .textFieldStyle(RoundedBorderTextFieldStyle())
+        .padding()
+      
+      if isLoading {
+        ProgressView()
+          .padding()
+      }
+      
+      Button(action: sendMessage) {
+        Text("Submit")
+      }
+      .disabled(inputText.isEmpty || isLoading)
+      .padding()
+    }
+  }
+  
   private func sendMessage() {
     isLoading = true
     
@@ -118,7 +119,7 @@ struct ChatView: View {
         inputText.removeAll()
         
       } catch {
-        isLoading = false        
+        isLoading = false
         print("Got an error: \(error)")
       }
     }
