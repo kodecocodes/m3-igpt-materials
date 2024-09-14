@@ -66,43 +66,11 @@ extension Array where Element == GPTMessage {
 struct GPTChatRequest: Codable {
   let model: GPTModelVersion
   let messages: [GPTMessage]
-  let n: Int
-  
-  // Homework: Ask ChatGPT what these options do!
-  let temperature: Float?
-  let top_p: Float?
-  let stream: Bool?
-  let stop: [String]?
-  let max_tokens: Int?
-  let presence_penalty: Float?
-  let frequency_penalty: Float?
-  let logit_bias: [String: Float]?
-  let user: String?
   
   init(model: GPTModelVersion,
-       messages: [GPTMessage],
-       n: Int = 1,
-       temperature: Float? = nil,
-       top_p: Float? = nil,
-       stream: Bool? = nil,
-       stop: [String]? = nil,
-       max_tokens: Int? = nil,
-       presence_penalty: Float? = nil,
-       frequency_penalty: Float? = nil,
-       logit_bias: [String : Float]? = nil,
-       user: String? = nil) {
+       messages: [GPTMessage]) {
     self.model = model
     self.messages = messages
-    self.temperature = temperature
-    self.top_p = top_p
-    self.n = n
-    self.stream = stream
-    self.stop = stop
-    self.max_tokens = max_tokens
-    self.presence_penalty = presence_penalty
-    self.frequency_penalty = frequency_penalty
-    self.logit_bias = logit_bias
-    self.user = user
   }
 }
 
